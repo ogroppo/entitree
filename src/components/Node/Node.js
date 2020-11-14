@@ -1,10 +1,11 @@
 import React, { memo, useContext, useEffect, useMemo, useState } from "react";
 import {
-  IMAGE_SIZE,
-  CARD_WIDTH,
-  CARD_PADDING,
-  CARD_CONTENT_WIDTH,
-  CARD_HEIGHT,
+  getConstants,
+  // IMAGE_SIZE,
+  // CARD_WIDTH,
+  // CARD_PADDING,
+  // CARD_CONTENT_WIDTH,
+  // CARD_HEIGHT,
 } from "../../constants/tree";
 import { Button } from "react-bootstrap";
 import {
@@ -43,6 +44,8 @@ export default memo(function Node({
   toggleSpouses,
   setFocusedNode,
   focusedNode,
+  currentTheme,
+  themeSettings,
   debug,
 }) {
   if (debug) console.log(node);
@@ -57,6 +60,12 @@ export default memo(function Node({
   const hideModal = () => {
     setShowModal(false);
   };
+
+  // if (currentTheme === "onlyLabel") {
+  //   const CARD_WIDTH = 200;
+  // }
+  // const CARD_WIDTH = themeSettings.cardWidth;
+  themeSettings = getConstants(themeSettings.cardWidth);
 
   const eyeColor = useMemo(
     () => colorByProperty(node.data.simpleClaims[EYE_COLOR_ID]),
@@ -115,9 +124,9 @@ export default memo(function Node({
       style={{
         left: node.x,
         top: node.y,
-        width: CARD_WIDTH,
-        height: CARD_HEIGHT,
-        padding: CARD_PADDING,
+        width: themeSettings.CARD_WIDTH,
+        height: themeSettings.CARD_HEIGHT,
+        padding: themeSettings.CARD_PADDING,
       }}
       className={clsx("Node", {
         focused: focusedNode && focusedNode.treeId === node.treeId,
@@ -129,7 +138,10 @@ export default memo(function Node({
     >
       <div
         className={clsx("imgWrapper", { hasThumbnails: thumbnails.length > 1 })}
-        style={{ height: IMAGE_SIZE, width: IMAGE_SIZE }}
+        style={{
+          height: themeSettings.IMAGE_SIZE,
+          width: themeSettings.IMAGE_SIZE,
+        }}
         onClick={onThumbClick}
       >
         {(!thumbnails || !thumbnails.length) && (
@@ -173,7 +185,10 @@ export default memo(function Node({
       </div>
       <div
         className="content"
-        style={{ height: IMAGE_SIZE, width: CARD_CONTENT_WIDTH }}
+        style={{
+          height: themeSettings.IMAGE_SIZE,
+          width: themeSettings.CARD_CONTENT_WIDTH,
+        }}
       >
         {settings.showEyeHairColors && (
           <div

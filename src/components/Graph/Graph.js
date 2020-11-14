@@ -13,7 +13,7 @@ import { TransformComponent } from "react-zoom-pan-pinch";
 import getItems from "../../wikidata/getItems";
 import { hierarchy } from "d3-hierarchy";
 import {
-  CARD_WIDTH,
+  // CARD_WIDTH,
   SIBLING_SPOUSE_SEPARATION,
   MAX_SCALE,
   MIN_SCALE,
@@ -23,7 +23,8 @@ import Node from "../Node/Node";
 import Rel from "../Rel/Rel";
 import { CHILD_ID } from "../../constants/properties";
 import graphReducer, {
-  initialState,
+  initialStateFunc,
+  // initialState,
   collapseRootSiblings,
   collapseSiblings,
 } from "./graphReducer";
@@ -67,10 +68,19 @@ const Graph = memo(
       secondLang,
       setLoadingEntity,
       currentUpMap,
+      currentTheme,
+      themeSettings,
     } = useContext(AppContext);
 
-    const [graph, dispatchGraph] = useReducer(graphReducer, initialState);
+    const [graph, dispatchGraph] = useReducer(
+      graphReducer,
+      initialStateFunc(themeSettings.cardWidth)
+    );
     const [focusedNode, setFocusedNode] = useState();
+    const CARD_WIDTH = themeSettings.cardWidth;
+    // if (currentTheme === "onlyLabel") {
+    //   const CARD_WIDTH = 200;
+    // }
 
     const graphRef = useRef();
     const [graphWidth, setGraphWidth] = useState(0);
@@ -536,6 +546,7 @@ const Graph = memo(
                         node={node}
                         setFocusedNode={setFocusedNode}
                         focusedNode={focusedNode}
+                        themeSettings={themeSettings}
                       />
                     ))}
                   {root && (
@@ -556,6 +567,7 @@ const Graph = memo(
                       node={root}
                       setFocusedNode={setFocusedNode}
                       focusedNode={focusedNode}
+                      themeSettings={themeSettings}
                     />
                   )}
                   {root &&
@@ -566,6 +578,7 @@ const Graph = memo(
                         node={node}
                         setFocusedNode={setFocusedNode}
                         focusedNode={focusedNode}
+                        themeSettings={themeSettings}
                       />
                     ))}
                   {childNodes.map((node, index) => (
@@ -585,6 +598,7 @@ const Graph = memo(
                       node={node}
                       setFocusedNode={setFocusedNode}
                       focusedNode={focusedNode}
+                      themeSettings={themeSettings}
                     />
                   ))}
                   {parentNodes.map((node, index) => (
@@ -604,6 +618,7 @@ const Graph = memo(
                       node={node}
                       setFocusedNode={setFocusedNode}
                       focusedNode={focusedNode}
+                      themeSettings={themeSettings}
                     />
                   ))}
                 </div>

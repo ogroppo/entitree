@@ -1,6 +1,10 @@
 import treeLayout from "../../lib/getTreeLayout";
-import { CARD_WIDTH, CARD_HEIGHT } from "../../constants/tree";
+import {
+  CARD_WIDTH,
+  CARD_HEIGHT
+} from "../../constants/tree";
 import cloneDeep from "lodash.clonedeep";
+import { tree } from "d3-hierarchy";
 
 export const initialState = {
   maxLeft: -CARD_WIDTH,
@@ -19,8 +23,28 @@ export const initialState = {
   },
   root: null,
 };
+export function initialStateFunc(CARD_WIDTH, CARD_HEIGHT) {
+  return {
+    maxLeft: -CARD_WIDTH,
+    maxRight: CARD_WIDTH,
+    maxTop: -CARD_HEIGHT,
+    maxBottom: CARD_HEIGHT,
+    childNodes: [],
+    childRels: [],
+    parentNodes: [],
+    parentRels: [],
+    childTree: {},
+    parentTree: {},
+    containerStyle: {
+      width: 2 * CARD_WIDTH,
+      height: 2 * CARD_HEIGHT,
+    },
+    root: null,
+  };
+}
 
 export default function graphReducer(graph, { type, ...arg }) {
+  console.log(graph);
   //console.log({ type });
   switch (type) {
     case "set":
@@ -217,7 +241,7 @@ export const collapseRootSiblings = (graph, root) => {
 };
 
 export const recalcChildren = (graph) => {
-  treeLayout(graph.childTree);
+  treeLayout(graph.childTree); //.nodeSize([CARD_WIDTH, CARD_VERTICAL_SPACING]);
   graph.childNodes = graph.childTree.descendants().slice(1);
   graph.childRels = graph.childTree.links();
   calcBounds(graph);

@@ -29,6 +29,9 @@ export default class App extends Component {
     currentProp: null,
     currentPropId: null,
     currentTheme: "default",
+    themeSettings: {
+      cardWidth: 250,
+    },
     settings: {
       showGenderColor: false,
       showEyeHairColors: false,
